@@ -1,0 +1,16 @@
+{
+  "name": "proposal-flow",
+  "version": "1.0.0",
+  "description": "Subscription-based proposal management tool for Fractional Product Consultants",
+  "scripts": {
+    "dev:client": "cd client && npm run dev",
+    "dev:server": "cd server && npm run dev",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\""
+  },
+  "keywords": [],
+  "author": "ek",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
