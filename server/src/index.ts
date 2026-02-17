@@ -1,6 +1,7 @@
 import express from "express";
 import "dotenv/config";
 import cors from "cors";
+import db from "./lib/db.js";
 
 const app = express();
 
@@ -14,6 +15,21 @@ app.get("/health", (_req, res) => {
     status: "healthy",
     message: "Server is running smoothly",
   });
+});
+
+app.get("/health/db", async (_req, res) => {
+  try {
+    await db.$queryRaw`SELECT 1`;
+    res.status(200).json({
+      status: "healthy",
+      database: true,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "unhealthy",
+      database: false,
+    });
+  }
 });
 
 app.listen(PORT, () => {

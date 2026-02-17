@@ -6,3 +6,48 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+enum Plan {
+  FREE
+  PRO
+}
+
+model User {
+  id        String     @id @default(uuid())
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  name      String
+  email     String     @unique
+  plan      Plan       @default(FREE)
+  password  String
+  proposals Proposal[]
+}
+
+enum ProposalStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+model Proposal {
+  id                String             @id @default(uuid())
+  userId            String
+  user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  clientInfo        String
+  engagementType    String
+  duration          Int
+  status            ProposalStatus     @default(PENDING)
+  totalAmount       Decimal
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  proposalLineItems ProposalLineItem[]
+}
+
+model ProposalLineItem {
+  id          String   @id @default(uuid())
+  description String
+  quantity    Int
+  rate        Decimal
+  proposalId  String
+  proposal    Proposal @relation(fields: [proposalId], references: [id], onDelete: Cascade)
+}
