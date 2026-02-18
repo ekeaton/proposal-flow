@@ -4,6 +4,7 @@ import cors from "cors";
 import db from "./lib/db.js";
 import authRoutes from "./routes/auth.js";
 import proposalRoutes from "./routes/proposals.js";
+import dashboardRoutes from "./routes/dashboard.js";
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/proposals", proposalRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 
 app.get("/health", (_req, res) => {
   res.status(200).json({
