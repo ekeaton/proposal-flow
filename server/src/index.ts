@@ -3,6 +3,7 @@ import "dotenv/config";
 import cors from "cors";
 import db from "./lib/db.js";
 import authRoutes from "./routes/auth.js";
+import proposalRoutes from "./routes/proposals.js";
 
 const app = express();
 
@@ -12,6 +13,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
+app.use("/api/proposals", proposalRoutes);
 
 app.get("/health", (_req, res) => {
   res.status(200).json({
