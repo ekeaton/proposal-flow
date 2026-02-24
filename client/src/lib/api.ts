@@ -1,3 +1,5 @@
+import { type Proposal, type Dashboard } from "./types";
+
 const BASE_URL = import.meta.env.VITE_API_URL;
 
 function getToken() {
@@ -38,4 +40,12 @@ export function login(email: string, password: string) {
     method: "POST",
     body: JSON.stringify({ email, password }),
   });
+}
+
+export function getProposals() {
+  return request<{ proposals: Proposal[] }>("/api/proposals");
+}
+
+export function getDashboard() {
+  return request<Dashboard>("/api/dashboard");
 }

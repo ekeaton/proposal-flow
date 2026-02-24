@@ -9,8 +9,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const token = localStorage.getItem("token");
     if (!token) return null;
     try {
-      const decoded = jwtDecode<{ userId: string }>(token);
-      return { id: decoded.userId };
+      const decoded = jwtDecode<{ userId: string; name: string }>(token);
+      return { id: decoded.userId, name: decoded.name };
     } catch {
       localStorage.removeItem("token");
       return null;
@@ -30,8 +30,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const data = await apiLogin(email, password);
     localStorage.setItem("token", data.token);
     setToken(data.token);
-    const decoded = jwtDecode<{ userId: string }>(data.token);
-    setUser({ id: decoded.userId });
+    const decoded = jwtDecode<{ userId: string; name: string }>(data.token);
+    setUser({ id: decoded.userId, name: decoded.name });
   }
 
   async function register(
@@ -42,7 +42,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const data = await apiRegister(name, email, password);
     localStorage.setItem("token", data.token);
     setToken(data.token);
-    setUser({ id: data.id });
+    const decoded = jwtDecode<{ userId: string; name: string }>(data.token);
+    setUser({ id: decoded.userId, name: decoded.name });
   }
 
   return (

@@ -57,31 +57,22 @@ function RegisterPage() {
       }}
     >
       <Paper
-        elevation={0}
         sx={{
           padding: "48px",
           width: "100%",
           maxWidth: "450px",
-          borderRadius: "16px",
-          border: "1px solid #E5E7EB",
           boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
-          backgroundColor: "#FFFFFF",
         }}
       >
         {/* Header Section */}
         <Box sx={{ marginBottom: "32px" }}>
           <Typography
             variant="h4"
-            sx={{
-              fontWeight: 800,
-              color: "#111827",
-              marginBottom: "8px",
-              letterSpacing: "-0.02em",
-            }}
+            sx={{ marginBottom: "8px" }}
           >
             Create Account
           </Typography>
-          <Typography variant="body1" sx={{ color: "#4B5563" }}>
+          <Typography variant="body1" sx={{ color: "text.secondary" }}>
             Join{" "}
             <span style={{ fontWeight: 700, color: "#111827" }}>
               ProposalFlow
@@ -114,12 +105,6 @@ function RegisterPage() {
             {...register("name")}
             error={!!errors.name}
             helperText={errors.name?.message}
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                borderRadius: "8px",
-                backgroundColor: "#F9FAFB",
-              },
-            }}
           />
           <TextField
             label="Email Address"
@@ -128,12 +113,6 @@ function RegisterPage() {
             {...register("email")}
             error={!!errors.email}
             helperText={errors.email?.message}
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                borderRadius: "8px",
-                backgroundColor: "#F9FAFB",
-              },
-            }}
           />
 
           <TextField
@@ -144,12 +123,6 @@ function RegisterPage() {
             {...register("password")}
             error={!!errors.password}
             helperText={errors.password?.message}
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                borderRadius: "8px",
-                backgroundColor: "#F9FAFB",
-              },
-            }}
             slotProps={{
               input: {
                 endAdornment: (
@@ -171,20 +144,6 @@ function RegisterPage() {
             variant="contained"
             fullWidth
             disabled={isSubmitting}
-            sx={{
-              paddingTop: "14px",
-              paddingBottom: "14px",
-              textTransform: "none",
-              fontWeight: 700,
-              fontSize: "1rem",
-              borderRadius: "8px",
-              backgroundColor: "#111827",
-              boxShadow: "none",
-              "&:hover": {
-                backgroundColor: "#1F2937",
-                boxShadow: "none",
-              },
-            }}
           >
             {isSubmitting ? (
               <CircularProgress size={24} color="inherit" />
@@ -197,7 +156,7 @@ function RegisterPage() {
 
           <Typography
             variant="body2"
-            sx={{ textAlign: "center", color: "#4B5563" }}
+            sx={{ textAlign: "center", color: "text.secondary" }}
           >
             Already have an account?{" "}
             <Link
@@ -206,7 +165,7 @@ function RegisterPage() {
               sx={{
                 fontWeight: 700,
                 textDecoration: "none",
-                color: "#2563EB",
+                color: "primary.main",
               }}
             >
               Sign In
@@ -217,7 +176,7 @@ function RegisterPage() {
 
       <Typography
         variant="caption"
-        sx={{ marginTop: "32px", color: "#9CA3AF" }}
+        sx={{ marginTop: "32px", color: "text.disabled" }}
       >
         © 2026 ProposalFlow Inc.
       </Typography>
