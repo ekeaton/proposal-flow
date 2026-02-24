@@ -5,11 +5,11 @@ import jwt from "jsonwebtoken";
 
 const router = Router();
 
-const generateToken = (userId: string) => {
+const generateToken = (userId: string, name: string) => {
   if (!process.env.JWT_SECRET) {
     throw new Error("JWT_SECRET is not defined");
   }
-  return jwt.sign({ userId }, process.env.JWT_SECRET, {
+  return jwt.sign({ userId, name }, process.env.JWT_SECRET, {
     expiresIn: "24h",
   });
 };
@@ -28,7 +28,7 @@ router.post("/register", async (req, res) => {
       data: { email, name, password: hashedPassword },
     });
 
-    const token = generateToken(newUser.id);
+    const token = generateToken(newUser.id, newUser.name);
 
     return res
       .status(201)
@@ -51,7 +51,7 @@ router.post("/login", async (req, res) => {
     if (!passwordMatch) {
       return res.status(401).json({ error: "Invalid credentials" });
     }
-    const token = generateToken(foundUser.id);
+    const token = generateToken(foundUser.id, foundUser.name);
 
     return res.status(200).json({ token });
   } catch (error) {

@@ -1,15 +1,10 @@
 import { Router } from "express";
 import db from "../lib/db.js";
 import authMiddleware from "../middleware/auth.js";
+import { createProposalSchema, updateProposalSchema } from "../lib/schemas.js";
 
 const router = Router();
 router.use(authMiddleware);
-
-type LineItem = {
-  quantity: number;
-  rate: number;
-  description: string;
-};
 
 /**
  * POST /api/proposals
@@ -17,31 +12,41 @@ type LineItem = {
  */
 router.post("/", async (req, res) => {
   try {
-    const { clientInfo, engagementType, duration, lineItems } = req.body;
+    const result = createProposalSchema.safeParse(req.body);
+    if (!result.success) {
+      return res.status(400).json({ error: result.error.issues });
+    }
+
+    const {
+      clientCompany,
+      clientContactName,
+      clientContactEmail,
+      engagementType,
+      duration,
+      lineItems,
+    } = result.data;
 
     if (!req.userId) {
       return res.status(401).json({ error: "Unauthorized" });
     }
-
-    if (!Array.isArray(lineItems)) {
-      return res.status(400).json({ error: "lineItems must be an array" });
-    }
     const userId = req.userId;
 
-    const totalAmount = lineItems.reduce((total: number, item: LineItem) => {
+    const totalAmount = lineItems.reduce((total: number, item) => {
       return total + item.quantity * item.rate;
     }, 0);
 
     const proposal = await db.$transaction(async (tx) => {
       return await tx.proposal.create({
         data: {
-          clientInfo,
+          clientCompany,
+          clientContactName,
+          clientContactEmail,
           engagementType,
           duration,
           totalAmount,
           user: { connect: { id: userId } },
           proposalLineItems: {
-            create: lineItems.map((item: LineItem) => ({
+            create: lineItems.map((item) => ({
               description: item.description,
               quantity: item.quantity,
               rate: item.rate,
@@ -124,8 +129,19 @@ router.patch("/:id", async (req, res) => {
 
     const id = req.params.id;
 
-    const { clientInfo, engagementType, duration, status, lineItems } =
-      req.body;
+    const result = updateProposalSchema.safeParse(req.body);
+    if (!result.success) {
+      return res.status(400).json({ error: result.error.issues });
+    }
+    const {
+      clientCompany,
+      clientContactName,
+      clientContactEmail,
+      engagementType,
+      duration,
+      lineItems,
+      status,
+    } = result.data;
 
     const proposal = await db.proposal.findFirst({
       where: { id, userId },
@@ -138,7 +154,7 @@ router.patch("/:id", async (req, res) => {
 
     let newTotalAmount = 0;
     if (lineItems) {
-      newTotalAmount = lineItems.reduce((total: number, item: LineItem) => {
+      newTotalAmount = lineItems.reduce((total: number, item) => {
         return total + item.quantity * item.rate;
       }, 0);
     }
@@ -147,7 +163,9 @@ router.patch("/:id", async (req, res) => {
       return await tx.proposal.update({
         where: { id },
         data: {
-          clientInfo,
+          clientCompany,
+          clientContactEmail,
+          clientContactName,
           engagementType,
           duration,
           status,
@@ -155,7 +173,7 @@ router.patch("/:id", async (req, res) => {
             totalAmount: newTotalAmount,
             proposalLineItems: {
               deleteMany: {},
-              create: lineItems.map((item: LineItem) => ({
+              create: lineItems.map((item) => ({
                 description: item.description,
                 quantity: item.quantity,
                 rate: item.rate,

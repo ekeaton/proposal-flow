@@ -30,17 +30,19 @@ enum ProposalStatus {
 }
 
 model Proposal {
-  id                String             @id @default(uuid())
-  userId            String
-  user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
-  clientInfo        String
-  engagementType    String
-  duration          Int
-  status            ProposalStatus     @default(PENDING)
-  totalAmount       Decimal
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
-  proposalLineItems ProposalLineItem[]
+  id                 String             @id @default(uuid())
+  userId             String
+  user               User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  clientCompany      String
+  clientContactName  String
+  clientContactEmail String
+  engagementType     String
+  duration           Int
+  status             ProposalStatus     @default(PENDING)
+  totalAmount        Decimal
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+  proposalLineItems  ProposalLineItem[]
 }
 
 model ProposalLineItem {
