@@ -1,3 +1,4 @@
+import { type ProposalFormValues } from "./schemas";
 import { type Proposal, type Dashboard } from "./types";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
@@ -48,4 +49,22 @@ export function getProposals() {
 
 export function getDashboard() {
   return request<Dashboard>("/api/dashboard");
+}
+
+export function getProposal(id: string) {
+  return request<{ proposal: Proposal }>(`/api/proposals/${id}`);
+}
+
+export function createProposal(data: ProposalFormValues) {
+  return request<{ proposal: Proposal }>("/api/proposals", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+export function updateProposal(id: string, data: ProposalFormValues) {
+  return request<{ proposal: Proposal }>(`/api/proposals/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
 }

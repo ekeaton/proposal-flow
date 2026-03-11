@@ -52,7 +52,7 @@ function LoginPage() {
         alignItems: "center",
         justifyContent: "center",
         minHeight: "100vh",
-        backgroundColor: "#F3F4F6",
+        backgroundColor: "background.default",
         padding: "24px",
       }}
     >
